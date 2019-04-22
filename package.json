@@ -1,12 +1,21 @@
 {
   "name": "vue-cli-plugin-preset-ts",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "vue-cli-plugin-preset-ts",
   "keywords": [
+    "bluelovers",
     "preset",
     "vue-cli",
     "vue-cli-plugin-preset"
   ],
+  "homepage": "https://github.com/bluelovers/vue-cli-plugin-preset-ts#readme",
+  "bugs": {
+    "url": "https://github.com/bluelovers/vue-cli-plugin-preset-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluelovers/vue-cli-plugin-preset-ts.git"
+  },
   "license": "ISC",
   "author": "",
   "main": "generator.js",

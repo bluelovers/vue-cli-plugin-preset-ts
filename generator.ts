@@ -95,7 +95,6 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 	let files_not_exists = Object.entries([
 			'tsconfig.json',
 			'.browserslistrc',
-			'.gitignore',
 		].reduce((a, file) =>
 		{
 
