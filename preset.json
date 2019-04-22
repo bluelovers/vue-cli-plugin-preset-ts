@@ -1,0 +1,14 @@
+{
+  "useConfigFiles": true,
+  "plugins": {
+    "@vue/cli-plugin-typescript": {
+      "classComponent": true
+    },
+    "@vue/cli-plugin-pwa": {},
+    "@vue/cli-plugin-unit-mocha": {}
+  },
+  "router": true,
+  "routerHistoryMode": true,
+  "vuex": true,
+  "cssPreprocessor": "dart-sass"
+}
