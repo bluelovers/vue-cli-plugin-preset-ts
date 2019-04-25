@@ -1,12 +1,15 @@
 {
   "name": "vue-cli-plugin-preset-ts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vue-cli-plugin-preset-ts",
   "keywords": [
     "bluelovers",
     "preset",
+    "structure",
     "vue-cli",
-    "vue-cli-plugin-preset"
+    "vue-cli-plugin",
+    "vue-cli-plugin-preset",
+    "vue-cli-preset"
   ],
   "homepage": "https://github.com/bluelovers/vue-cli-plugin-preset-ts#readme",
   "bugs": {
