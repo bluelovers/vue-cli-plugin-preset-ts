@@ -97,20 +97,23 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 			'.browserslistrc',
 		].reduce((a, file) =>
 		{
-
 			a[file] = file;
 
 			return a
 		}, Object.entries({
 			'.gitignore': 'gitignore',
+			'.nvmrc': 'nvmrc',
+			'public/nojekyll': 'nojekyll',
 		}).reduce((a, [file, file2]) =>
 		{
 
 			file2 = path.join('dot', file2);
-			a[file] = file2
+			a[file] = file2;
 
 			return a;
-		}, {} as {
+		}, {
+			'public/_headers': '_headers',
+		} as {
 			[file: string]: string,
 		})))
 		.reduce((a, [file, file2]) =>
