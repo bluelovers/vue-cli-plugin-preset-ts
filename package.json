@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-plugin-preset-ts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "vue-cli-plugin-preset-ts",
   "keywords": [
     "bluelovers",
@@ -25,10 +25,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "fs-extra": "^7.0.1"
+  },
   "devDependencies": {
-    "@bluelovers/tsconfig": "^1.0.2",
-    "@types/node": "^11.13.7"
+    "@bluelovers/tsconfig": "^1.0.3",
+    "@types/fs-extra": "^5.0.5",
+    "@types/node": "^11.13.8"
   },
   "publishConfig": {
     "access": "public"

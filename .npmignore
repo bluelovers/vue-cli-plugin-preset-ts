@@ -34,3 +34,6 @@ yarn.lock
 *.tgz
 !/files/tsconfig.json
 !/files/**/*
+/files/src/**/*.d.ts
+/files/src/**/*.js
+/files/src/**/*.js.map

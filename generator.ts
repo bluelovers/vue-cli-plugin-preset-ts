@@ -1,7 +1,12 @@
 import PresetJson = require('./preset.json');
 import PackageJson = require('./package.json');
-import fs = require('fs');
+import fs = require('fs-extra');
 import path = require('path');
+import _prompts = require('./prompts');
+
+type IPrompts = typeof _prompts;
+
+type IArrayValueOf<T> = T extends (infer U)[] ? U : string;
 
 type IPackageJsonFields = Partial<typeof PackageJson> & {
 	scripts?: {
@@ -30,7 +35,10 @@ interface IVueCliGeneratorApi
 
 	hasPlugin(id: string): boolean,
 
-	onCreateComplete(cb: () => any): void
+	onCreateComplete(cb: () => any): void,
+
+	readonly entryFile: string,
+	injectImports(file: string, code : string): void
 }
 
 interface IVueCliGeneratorOptions
@@ -58,9 +66,17 @@ type IVueCliGeneratorRootOptions = typeof PresetJson & {
 	[k: string]: unknown,
 }
 
+type ITSValueOf<T> = T[keyof T];
+
 interface IVueCliGeneratorOptionsThisPlugin
 {
 	replaceFiles: boolean,
+	depsCrossFetch: boolean,
+	depsVueHeadful: boolean,
+	depsVueSession: boolean,
+	depsBluebird: boolean,
+
+	[k: string]: unknown,
 }
 
 function cliPluginMain(api: IVueCliGeneratorApi,
@@ -74,8 +90,52 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 		console.log(`[Generator] extendPackage`);
 		console.dir(pkg);
 
+		let deps = {} as {
+			[k: string]: string,
+		};
+
+		let depsDev = {} as {
+			[k: string]: string,
+		};
+
+		if (options.depsVueAnalytics)
+		{
+			deps["vue-analytics"] = "^5.16.4";
+		}
+
+		if (options.depsVueHeadful)
+		{
+			deps["vue-headful"] = "^2.0.1";
+		}
+
+		if (options.depsVueSession)
+		{
+			deps["vue-session"] = "^1.0.0";
+		}
+
+		if (options.depsVueGlobalEvents)
+		{
+			deps["vue-global-events"] = "^1.1.2";
+		}
+
+		if (options.depsBluebird)
+		{
+			deps["bluebird"] = "^3.5.4";
+		}
+
+		pkg.dependencies = {
+
+			...deps,
+
+			...pkg.dependencies,
+		};
+
 		pkg.devDependencies = {
-			"@bluelovers/tsconfig": "^1.0.2",
+
+			...depsDev,
+
+			"@types/node": "^11",
+			"@bluelovers/tsconfig": "^1.0.3",
 			"@types/webpack-chain": "^5.2.0",
 			"terser": "3.17.0",
 			"terser-webpack-plugin": "^1.2.3",
@@ -91,6 +151,8 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 
 	console.log(`[Generator] rootOptions`);
 	console.dir(rootOptions);
+
+	api.injectImports(api.entryFile, `import { production, development } from '@/lib/const'`);
 
 	let files_not_exists = Object.entries([
 			'tsconfig.json',
@@ -111,11 +173,23 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 			a[file] = file2;
 
 			return a;
-		}, {
-			'public/_headers': '_headers',
-		} as {
-			[file: string]: string,
-		})))
+		}, (() => {
+			let ret = {
+				'public/_headers': '_headers',
+				'src/lib/const.ts': 'src/lib/const.ts',
+			} as {
+				[file: string]: string,
+			};
+
+			if (options.depsVueAnalytics)
+			{
+				ret['src/plugins/vue-analytics.ts'] = 'src/plugins/vue-analytics.ts';
+
+				api.injectImports(api.entryFile, `import '@/plugins/vue-analytics'`);
+			}
+
+			return ret;
+		}))()))
 		.reduce((a, [file, file2]) =>
 		{
 
@@ -176,6 +250,8 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 				let fpath = api.resolve(file);
 				let exists = fs.existsSync(fpath);
 
+				fs.ensureDir(path.dirname(fpath));
+
 				if (exists)
 				{
 					console.log(`[Generator] overwrite ${file}`);
@@ -197,8 +273,22 @@ function cliPluginMain(api: IVueCliGeneratorApi,
 			})
 		;
 
+		try
+		{
+			//let json = readJSONSync(api.resolve('package.json')) as IPackageJsonFields;
+		}
+		catch (e)
+		{
+
+		}
+
 		console.log(`\n`);
 	});
 }
 
 export = cliPluginMain
+
+function readJSONSync<T extends unknown>(file: string): T
+{
+	return JSON.parse(fs.readFileSync(file).toString());
+}

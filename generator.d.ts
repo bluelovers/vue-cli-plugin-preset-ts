@@ -22,6 +22,8 @@ interface IVueCliGeneratorApi {
     resolve(_path: string): string;
     hasPlugin(id: string): boolean;
     onCreateComplete(cb: () => any): void;
+    readonly entryFile: string;
+    injectImports(file: string, code: string): void;
 }
 interface IVueCliGeneratorOptions {
     _isPreset?: boolean;
@@ -45,6 +47,11 @@ declare type IVueCliGeneratorRootOptions = typeof PresetJson & {
 };
 interface IVueCliGeneratorOptionsThisPlugin {
     replaceFiles: boolean;
+    depsCrossFetch: boolean;
+    depsVueHeadful: boolean;
+    depsVueSession: boolean;
+    depsBluebird: boolean;
+    [k: string]: unknown;
 }
 declare function cliPluginMain(api: IVueCliGeneratorApi, options: IVueCliGeneratorOptions & IVueCliGeneratorOptionsThisPlugin, rootOptions: IVueCliGeneratorRootOptions): void;
 export = cliPluginMain;

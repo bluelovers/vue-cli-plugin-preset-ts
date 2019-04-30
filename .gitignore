@@ -57,3 +57,6 @@ yarn-error.log
 yarn.lock
 
 *.tgz
+/files/src/**/*.d.ts
+/files/src/**/*.js
+/files/src/**/*.js.map
